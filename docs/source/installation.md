@@ -1,23 +1,23 @@
 Installation
 ============
 
-**my-package** supports Python >= 3.7.
+**tp-chaos-generator** supports Python >= 3.7.
 
 ## Installing with `pip`
 
-**my-package** is available [on PyPI](https://pypi.org/project/my-package/). Just run
+**tp-chaos-generator** is available [on PyPI](https://pypi.org/project/tp-chaos-generator/). Just run
 
 ```bash
-pip install my-package
+pip install tp-chaos-generator
 ```
 
 ## Installing from source
 
-To install **my-package** from source, first clone [the repository](https://github.com/allenai/python-package-template):
+To install **tp-chaos-generator** from source, first clone [the repository](https://github.com/souradipp76/tp_chaos_generator):
 
 ```bash
-git clone https://github.com/allenai/python-package-template.git
-cd python-package-template
+git clone https://github.com/souradipp76/tp_chaos_generator.git
+cd tp_chaos_generator
 ```
 
 Then run

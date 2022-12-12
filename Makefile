@@ -1,7 +1,7 @@
 .PHONY : docs
 docs :
 	rm -rf docs/build/
-	sphinx-autobuild -b html --watch my_package/ docs/source/ docs/build/
+	sphinx-autobuild -b html --watch tp_chaos_generator/ docs/source/ docs/build/
 
 .PHONY : run-checks
 run-checks :
@@ -9,4 +9,4 @@ run-checks :
 	black --check .
 	flake8 .
 	mypy .
-	CUDA_VISIBLE_DEVICES='' pytest -v --color=yes --doctest-modules tests/ my_package/
+	CUDA_VISIBLE_DEVICES='' pytest -v --color=yes --doctest-modules tests/ tp_chaos_generator/
