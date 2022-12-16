@@ -1,4 +1,4 @@
 # Add your own dependencies to this file.
 matplotlib>=1.4.2
 numpy>=1.1
-scipy>=1.9
+scipy>=1.9.3
