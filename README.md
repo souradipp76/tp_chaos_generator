@@ -8,7 +8,6 @@ triple-pendulum based chaos generator.
 You can install ``tp_chaos_generator`` with:
 
 ```
-
     $ pip install -e .
 ```
 
