@@ -1,11 +1,10 @@
 """ Chaos Generator """
 import struct
 import numpy as np
-import triple_pendulum_ode
 
-from utils import circular_bit_rotate, half_precision
+from utils import circular_bit_rotate, half_precision, triple_pendulum_ode
 
-class ChaosGenerator: 
+class ChaosGenerator:
     """ Chaos Generator """
     def __init__(
         self,
@@ -22,19 +21,19 @@ class ChaosGenerator:
     @classmethod
     def generate_key(cls) -> list:
         """ Key Generation """
-        m1=0.2944
-        m2=0.1765
-        m3=0.0947
-        l1=0.508
-        l2=0.254
-        l3=0.127
-        k1=0.005
-        k2=0
-        k3=0.0008
-        I1=9.526e-3
-        I2=1.625e-3
-        I3=1.848e-4
-        g=9.81
+        m1 = 0.2944
+        m2 = 0.1765
+        m3 = 0.0947
+        l1 = 0.508
+        l2 = 0.254
+        l3 = 0.127
+        k1 = 0.005
+        k2 = 0
+        k3 = 0.0008
+        I1 = 9.526e-3
+        I2 = 1.625e-3
+        I3 = 1.848e-4
+        g = 9.81
 
         theta1 = -0.4603
         theta2 = -1.2051
@@ -43,7 +42,7 @@ class ChaosGenerator:
         dtheta2 = 0
         dtheta3 = 0
 
-        key = [theta1,theta2,theta3,dtheta1,dtheta2,dtheta3,m1,m2,m3,l1,l2,l3,I1,I2,I3,k1,k2,k3,g]
+        key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3, m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
         return key
 
     def encrypt(self, plain_text: list) -> list:
@@ -62,13 +61,13 @@ class ChaosGenerator:
 
         key_len = len(self.key)
 
-        ### generate lookup table ###
-        lookup_table = []
+        #generate lookup table
+        lookup_table: list[int] = []
         for i in range(self.num_chars):
             lookup_table.append([])
 
         for j, y_val in enumerate(Y):
-            d = int(np.floor((y_val - y_min)/epsilon))
+            d = int(np.floor((y_val - y_min) / epsilon))
             lookup_values = lookup_table[d]
             lookup_values.append(j)
             lookup_table[d] = lookup_values
@@ -76,7 +75,7 @@ class ChaosGenerator:
         # print("Lookup Table")
         # print(lookup_table)
 
-        ### Encryption ###
+        #Encryption
         y = []
 
         ### selecting f(self.key) ###
@@ -93,25 +92,25 @@ class ChaosGenerator:
                 lookup_values = lookup_table[p]
                 #c = intervals{1,d+1};
 
-                ### select random between 0 to 1 and compare with eta ###
+                #select random between 0 to 1 and compare with eta
                 if r > self.eta:
                     #print(f"Index selected: {index}, Value: {lookup_values[index]}")
                     C = lookup_values[index]
 
-                    f = struct.unpack('H', half_precision(self.key[i%key_len]))[0]
+                    f = struct.unpack('H', half_precision(self.key[i % key_len]))[0]
 
-                    ### Operations ###
-                    C = circular_bit_rotate(C, -(i%16), 16)
+                    #Operations
+                    C = circular_bit_rotate(C, -(i % 16), 16)
                     C = C^f
-                    C = circular_bit_rotate(C, -(i%16), 16)
+                    C = circular_bit_rotate(C, -(i % 16), 16)
                     C = C^f
-                    C = circular_bit_rotate(C, -(i%16), 16)
+                    C = circular_bit_rotate(C, -(i % 16), 16)
                     C = C^f
 
                     y.append(C)
                     flag = True
                 else:
-                    index = (index+1) % len(lookup_values)
+                    index = (index + 1) % len(lookup_values)
 
                 # ### select random index ###
                 # len = len(lookup_values);
@@ -137,28 +136,28 @@ class ChaosGenerator:
         Y = yy[2]
         y_min = np.min(Y)
         y_max = np.max(Y)
-        epsilon = (y_max - y_min)/self.num_chars
+        epsilon = (y_max - y_min) / self.num_chars
 
         y = []
 
-        ### selecting f(self.key) ###
+        #selecting f(self.key)
         # f = halfprecision(self.key);
         # for K in range(1, key_len):
         #     f = bitxor(f, halfprecision(self.key[K]));
 
         for i, c in enumerate(cipher_text):
-            f = struct.unpack('H', half_precision(self.key[i%key_len]))[0]
+            f = struct.unpack('H', half_precision(self.key[i % key_len]))[0]
 
-            ### Operations ###
+            #Operations
             C = c^f
-            C = circular_bit_rotate(C, i%16, 16)
+            C = circular_bit_rotate(C, i % 16, 16)
             C = C^f
-            C = circular_bit_rotate(C, i%16, 16)
+            C = circular_bit_rotate(C, i % 16, 16)
             C = C^f
-            C = circular_bit_rotate(C, i%16, 16)
+            C = circular_bit_rotate(C, i % 16, 16)
 
             y_val =  Y[C]
-            d = np.floor((y_val - y_min)/epsilon)
+            d = np.floor((y_val - y_min) / epsilon)
             y.append(d)
 
         return y
@@ -186,7 +185,7 @@ def main():
     dtheta2 = 0
     dtheta3 = 0
 
-    key = [theta1,theta2,theta3,dtheta1,dtheta2,dtheta3,m1,m2,m3,l1,l2,l3,I1,I2,I3,k1,k2,k3,g]
+    key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3, m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
     cg = ChaosGenerator(key)
 
     str = 'A course in Cryptography'

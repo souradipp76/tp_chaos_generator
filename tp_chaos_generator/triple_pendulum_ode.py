@@ -7,7 +7,7 @@ from utils import state_plotter, trajectory_plotter
 
 def normalize(y):
     """ Normalize States """
-    y = y - np.floor(y/(2*np.pi))*(2*np.pi)
+    y = y - np.floor(y / (2 * np.pi)) * (2 * np.pi)
     return y
 
 def triple_pendulum_ode(start, end, step, ivp) -> list:
@@ -21,7 +21,7 @@ def triple_pendulum_ode(start, end, step, ivp) -> list:
     t, y = sol.t, sol.y
     y = normalize(y)
 
-    return t,y
+    return [t, y]
 
 def f(t, x, params) -> list:
     """ ODE Function """
@@ -65,7 +65,7 @@ def main():
     start = 0
     stop = 10
     fps = 10000
-    delta_t=1.0/fps
+    delta_t = 1.0 / fps
     t, y = triple_pendulum_ode(start, stop, delta_t, key)
 
     state_plotter(t, y, 1)
