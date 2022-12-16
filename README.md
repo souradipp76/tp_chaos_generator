@@ -7,14 +7,14 @@ triple-pendulum based chaos generator.
 
 You can install ``tp_chaos_generator`` with:
 
-.. code-block:: console
+```
 
     $ pip install -e .
+```
 
 ## Usage
 
-.. code-block:: pycon
-
+```python
     >>> from tp_chaos_generator import chaos_generator, utils
     >>> cg = chaos_generator.ChaosGenerator()
     >>> text = utils.convert_to_bytes("A really secret message. Not for prying eyes.")
@@ -24,4 +24,4 @@ You can install ``tp_chaos_generator`` with:
     >>> data = cg.decrypt(tokens)
     >>> utils.convert_to_string(data)
     'A really secret message. Not for prying eyes.'
-
+```
