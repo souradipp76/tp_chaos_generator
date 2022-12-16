@@ -1,8 +1,9 @@
 """ Chaos Generator """
 import struct
 import numpy as np
+import triple_pendulum_ode
 
-from utils import circular_bit_rotate, half_precision, triple_pendulum_ode
+from utils import circular_bit_rotate, half_precision
 
 class ChaosGenerator:
     """ Chaos Generator """
@@ -62,7 +63,7 @@ class ChaosGenerator:
         key_len = len(self.key)
 
         #generate lookup table
-        lookup_table: list[int] = []
+        lookup_table: list[list[int]] = []
         for i in range(self.num_chars):
             lookup_table.append([])
 
