@@ -1,7 +1,53 @@
+""" Utils """
+from __future__ import division
+from math import copysign, frexp, isinf, isnan, trunc
+
+import struct
 import numpy as np
 import matplotlib.pyplot as plt
 
+NEGATIVE_INFINITY = b'\x00\xfc'
+POSITIVE_INFINITY = b'\x00\x7c'
+POSITIVE_ZERO = b'\x00\x00'
+NEGATIVE_ZERO = b'\x00\x80'
+# exp=2**5-1 and significand non-zero
+EXAMPLE_NAN = struct.pack('<H', (0b11111 << 10) | 1)
+
+def half_precision(f):
+    """Convert Python float to IEEE 754-2008 (binary16) format.
+    """
+    if isnan(f):
+        return EXAMPLE_NAN
+
+    sign = copysign(1, f) < 0
+    if isinf(f):
+        return NEGATIVE_INFINITY if sign else POSITIVE_INFINITY
+
+    #           1bit        10bits             5bits
+    # f = (-1)**sign * (1 + f16 / 2**10) * 2**(e16 - 15)
+    # f = (m * 2)                        * 2**(e - 1)
+    m, e = frexp(f)
+    assert not (isnan(m) or isinf(m))
+    if e == 0 and m == 0:  # zero
+        return NEGATIVE_ZERO if sign else POSITIVE_ZERO
+
+    f16 = trunc((2 * abs(m) - 1) * 2**10)  # XXX round toward zero
+    assert 0 <= f16 < 2**10
+    e16 = e + 14
+    if e16 <= 0:  # subnormal
+        # f = (-1)**sign * fraction / 2**10 * 2**(-14)
+        f16 = int(2**14 * 2**10 * abs(f) + .5)  # XXX round
+        e16 = 0
+    elif e16 >= 0b11111:  # infinite
+        return NEGATIVE_INFINITY if sign else POSITIVE_INFINITY
+    else:
+        # normalized value
+        assert 0b00001 <= e16 < 0b11111, (f, sign, e16, f16)
+
+    return struct.pack('<H', (sign << 15) | (e16 << 10) | f16)
+
 def state_plotter(times, states, fig_num):
+    """ Plotting states of triple pendulum"""
     num_states = np.shape(states)[0]
     num_cols = int(np.ceil(np.sqrt(num_states)))
     num_rows = int(np.ceil(num_states / num_cols))
@@ -12,11 +58,11 @@ def state_plotter(times, states, fig_num):
     for n in range(num_states):
         row = n // num_cols
         col = n % num_cols
-        ax[row][col].plot(times, states[n], 'k.:')
+        ax[row][col].plot(times, states[n], 'k.:', markersize=0.5)
         ax[row][col].set(xlabel='Time',
-                         ylabel='$y_{:0.0f}(t)$'.format(n),
-                         title='$y_{:0.0f}(t)$ vs. Time'.format(n))
-        
+                         ylabel=f'$y_{n:0.0f}(t)$',
+                         title=f'$y_{n:0.0f}(t)$ vs. Time')
+
     for n in range(num_states, num_rows * num_cols):
         fig.delaxes(ax[n // num_cols][n % num_cols])
 
@@ -25,20 +71,30 @@ def state_plotter(times, states, fig_num):
 
     return fig, ax
 
-def plot_state(times, states, state_id):
-    plt.plot(times, states[state_id], '.', markersize=0.5)
-    plt.show()
-
-def plot_trajectory(times, states, params):
-    l1, l2, l3 = params[3:6]
+def trajectory_plotter(states, params: list):
+    """ Plotting trajectory of triple pendulum"""
+    L1, L2, L3 = params[3:6]
     phi1 = states[0]
     phi2 = states[1]
     phi3 = states[2]
-    x1, y1 = l1*np.sin(phi1),l1*np.cos(phi1)
-    x2, y2 = l1*np.sin(phi1)+l2*np.sin(phi2),l1*np.cos(phi1)+l2*np.cos(phi2)
-    x3, y3 = l1*np.sin(phi1)+l2*np.sin(phi2)+l3*np.sin(phi3),l1*np.cos(phi1)+l2*np.cos(phi2)+l3*np.cos(phi3)
+    x1, y1 = L1*np.sin(phi1), L1*np.cos(phi1)
+    x2, y2 = L1*np.sin(phi1) + L2*np.sin(phi2), L1*np.cos(phi1) + L2*np.cos(phi2)
+    x3, y3 = L1*np.sin(phi1) + L2*np.sin(phi2) + L3*np.sin(phi3), L1*np.cos(phi1) + L2*np.cos(phi2) + L3*np.cos(phi3)
     plt.plot(x1, y1, '.', markersize=0.5)
     plt.plot(x2, y2, '.', markersize=0.5)
     plt.plot(x3, y3, '.', markersize=0.5)
 
     plt.show()
+
+
+def circular_bit_rotate(n, n_bits, bit_len):
+    """ Circular Bit Rotate """
+    bit_str = bin(n)[2:].zfill(bit_len)
+
+    if n_bits > 0:
+        n_rotated = bit_str[bit_len-n_bits : ] + bit_str[0 : bit_len-n_bits]
+    else:
+        n_bits = -n_bits
+        n_rotated = bit_str[n_bits:] + bit_str[0 : n_bits]
+
+    return int(n_rotated, 2)

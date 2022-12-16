@@ -1,14 +1,17 @@
-import numpy as np
-from scipy.integrate import solve_ivp
+""" Utils """
 
-from utils import state_plotter, plot_state, plot_trajectory
+import numpy as np
+
+from scipy.integrate import solve_ivp
+from utils import state_plotter, trajectory_plotter
 
 def normalize(y):
+    """ Normalize States """
     y = y - np.floor(y/(2*np.pi))*(2*np.pi)
     return y
 
 def triple_pendulum_ode(start, end, step, ivp) -> list:
-    """ODE"""
+    """ Solve ODE """
     params = ivp[6:19]
     xinit = ivp[0:6]
 
@@ -21,7 +24,7 @@ def triple_pendulum_ode(start, end, step, ivp) -> list:
     return t,y
 
 def f(t, x, params) -> list:
-    """ ODE"""
+    """ ODE Function """
     m1, m2, m3, L1, L2, L3, I1, I2, I3, k1, k2, k3, g = params
     y0 = x[3]
     y1 = x[4]
@@ -34,19 +37,20 @@ def f(t, x, params) -> list:
     return dydt
 
 def main():
-    m1=0.2944
-    m2=0.1765
-    m3=0.0947
-    l1=0.508
-    l2=0.254
-    l3=0.127
-    k1=0.005
-    k2=0
-    k3=0.0008
-    I1=9.526e-3
-    I2=1.625e-3
-    I3=1.848e-4
-    g=9.81
+    """ Main Function """
+    m1 = 0.2944
+    m2 = 0.1765
+    m3 = 0.0947
+    l1 = 0.508
+    l2 = 0.254
+    l3 = 0.127
+    k1 = 0.005
+    k2 = 0
+    k3 = 0.0008
+    I1 = 9.526e-3
+    I2 = 1.625e-3
+    I3 = 1.848e-4
+    g = 9.81
 
 
     theta1 = -0.4603
@@ -56,17 +60,16 @@ def main():
     dtheta2 = 0
     dtheta3 = 0
 
-    key = [theta1,theta2,theta3,dtheta1,dtheta2,dtheta3,m1,m2,m3,l1,l2,l3,I1,I2,I3,k1,k2,k3,g]
+    key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3, m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
 
     start = 0
     stop = 10
     fps = 10000
     delta_t=1.0/fps
     t, y = triple_pendulum_ode(start, stop, delta_t, key)
-    
-    #state_plotter(sol.t, sol.y, 1)
-    plot_state(t, y, 2)
-    # plot_trajectory(sol.t, sol.y, c)
+
+    state_plotter(t, y, 1)
+    trajectory_plotter(y, key)
 
 if __name__ == "__main__":
     main()
