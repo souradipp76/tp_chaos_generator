@@ -1,17 +1,16 @@
 """ Chaos Generator """
 import struct
 import numpy as np
-import triple_pendulum_ode
 
-from utils import circular_bit_rotate, half_precision
+from .triple_pendulum_ode import triple_pendulum_ode
+from .utils import circular_bit_rotate, half_precision, convert_to_bytes, convert_to_string
 
 class ChaosGenerator:
     """ Chaos Generator """
     def __init__(
         self,
-        key: list
     ) -> None:
-        self.key = key
+        self.key = self.generate_key()
         self.fps = 10000
         self.tstart = 0
         self.tend = 6.5535
@@ -43,12 +42,14 @@ class ChaosGenerator:
         dtheta2 = 0
         dtheta3 = 0
 
-        key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3, m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
+        key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3, \
+            m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
         return key
 
-    def encrypt(self, plain_text: list) -> list:
+    def encrypt(self, plain_text: list[bytes]) -> list:
         """ Data Encryption """
-        _, yy = triple_pendulum_ode.triple_pendulum_ode(
+        
+        _, yy = triple_pendulum_ode(
             self.tstart,
             self.tend,
             self.delta_t,
@@ -125,11 +126,11 @@ class ChaosGenerator:
 
         return y
 
-    def decrypt(self, cipher_text: list) -> list:
+    def decrypt(self, cipher_text: list[int]) -> list[int]:
         """ Data Decryption """
         key_len = len(self.key)
 
-        _, yy = triple_pendulum_ode.triple_pendulum_ode(
+        _, yy = triple_pendulum_ode(
             self.tstart,
             self.tend,
             self.delta_t,
@@ -159,45 +160,21 @@ class ChaosGenerator:
 
             y_val =  Y[C]
             d = np.floor((y_val - y_min) / epsilon)
-            y.append(d)
+            y.append(int(d))
 
         return y
 
 def main():
     """ Main """
-    m1=0.2944
-    m2=0.1765
-    m3=0.0947
-    l1=0.508
-    l2=0.254
-    l3=0.127
-    k1=0.005
-    k2=0
-    k3=0.0008
-    I1=9.526e-3
-    I2=1.625e-3
-    I3=1.848e-4
-    g=9.81
-
-    theta1 = -0.4603
-    theta2 = -1.2051
-    theta3 = -1.5165
-    dtheta1 = 0
-    dtheta2 = 0
-    dtheta3 = 0
-
-    key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3, m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
-    cg = ChaosGenerator(key)
+    cg = ChaosGenerator()
 
     str = 'A course in Cryptography'
-    plain_text = [ord(x) for x in str]
+    plain_text = convert_to_bytes(str)
     print("Plain Text: ", plain_text)
     cipher_text = cg.encrypt(plain_text)
     print("Cipher Text: ", cipher_text)
     clear_text = cg.decrypt(cipher_text)
-
-    dec_text = [chr(int(i)) for i in clear_text]
-    dec_text = ''.join(dec_text)
+    dec_text = convert_to_string(clear_text)
     print("Clear Text: ", dec_text)
 
 if __name__ == "__main__":

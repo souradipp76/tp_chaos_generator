@@ -98,3 +98,16 @@ def circular_bit_rotate(n, n_bits, bit_len):
         n_rotated = bit_str[n_bits:] + bit_str[0:n_bits]
 
     return int(n_rotated, 2)
+
+def convert_to_bytes(data: str) -> list[bytes]:
+    """ Convert to Bytes"""
+    return [ord(x) for x in data]
+
+def convert_to_string(data: list[int]) -> str:
+    """ Convert to String"""
+    return "".join(map(chr, data))
+
+def normalize_states(y: list) -> list:
+    """ Normalize States """
+    y = y - np.floor(y / (2 * np.pi)) * (2 * np.pi)
+    return y
