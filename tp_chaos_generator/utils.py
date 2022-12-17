@@ -14,6 +14,7 @@ NEGATIVE_ZERO = b'\x00\x80'
 # exp=2**5-1 and significand non-zero
 EXAMPLE_NAN = struct.pack('<H', (0b11111 << 10) | 1)
 
+
 def half_precision(f):
     """Convert Python float to IEEE 754-2008 (binary16) format.
     """
@@ -55,8 +56,7 @@ def state_plotter(times, states, fig_num):
     num_rows = int(np.ceil(num_states / num_cols))
     plt.figure(fig_num)
     plt.clf()
-    fig, ax = plt.subplots(num_rows, num_cols, num=fig_num, clear=True,
-                         squeeze=False)
+    fig, ax = plt.subplots(num_rows, num_cols, num=fig_num, clear=True, squeeze=False)
     for n in range(num_states):
         row = n // num_cols
         col = n % num_cols
@@ -84,9 +84,9 @@ def trajectory_plotter(states, params: list):
     x2, y2 = L1 * np.sin(phi1) + L2 * np.sin(phi2), L1 * np.cos(phi1) + L2 * np.cos(phi2)
     x3, y3 = L1 * np.sin(phi1) + L2 * np.sin(phi2) + L3 * np.sin(phi3), \
         L1 * np.cos(phi1) + L2 * np.cos(phi2) + L3 * np.cos(phi3)
-    plt.plot(x1, y1, '.', markersize = 0.5)
-    plt.plot(x2, y2, '.', markersize = 0.5)
-    plt.plot(x3, y3, '.', markersize = 0.5)
+    plt.plot(x1, y1, '.', markersize=0.5)
+    plt.plot(x2, y2, '.', markersize=0.5)
+    plt.plot(x3, y3, '.', markersize=0.5)
 
     plt.show()
 

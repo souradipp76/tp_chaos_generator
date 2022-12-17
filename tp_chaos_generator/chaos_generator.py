@@ -11,6 +11,7 @@ from .utils import (
     half_precision,
 )
 
+
 class ChaosGenerator:
     """ Chaos Generator """
     def __init__(
@@ -20,7 +21,7 @@ class ChaosGenerator:
         self.fps = 10000
         self.tstart = 0
         self.tend = 6.5535
-        self.delta_t = 1./self.fps
+        self.delta_t = 1. / self.fps
         self.num_chars = 256
         self.eta = 0.9
 
@@ -48,10 +49,9 @@ class ChaosGenerator:
         dtheta2 = 0
         dtheta3 = 0
 
-        key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3, \
-            m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
+        key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3,
+                m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
         return key
-
 
     def encrypt(self, plain_text: list) -> list:
         """ Data Encryption """
@@ -65,13 +65,13 @@ class ChaosGenerator:
         Y = yy[2]
         y_min = np.min(Y)
         y_max = np.max(Y)
-        epsilon = (y_max + self.delta_t - y_min)/self.num_chars
-        # epsilon = 2*np.pi/num_chars
+        epsilon = (y_max + self.delta_t - y_min) / self.num_chars
+        # epsilon = 2 * np.pi / num_chars
 
         key_len = len(self.key)
 
         # generate lookup table
-        lookup_table = []
+        lookup_table : list[list] = []
         for i in range(self.num_chars):
             lookup_table.append([])
 
@@ -121,7 +121,7 @@ class ChaosGenerator:
                 else:
                     index = (index + 1) % len(lookup_values)
 
-                # # select random index 
+                # # select random index
                 # len = len(lookup_values);
                 # r2 = np.random.randint([1, len])
                 # print(f"Random num generated for length {len}: {r2}")
@@ -132,7 +132,6 @@ class ChaosGenerator:
                 # flag= True
 
         return y
-
 
     def decrypt(self, cipher_text: list) -> list:
         """ Data Decryption """
@@ -185,6 +184,7 @@ def main():
     clear_text = cg.decrypt(cipher_text)
     dec_text = convert_to_string(clear_text)
     print("Clear Text: ", dec_text)
+
 
 if __name__ == "__main__":
     main()
