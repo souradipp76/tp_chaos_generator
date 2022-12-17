@@ -99,7 +99,7 @@ def circular_bit_rotate(n, n_bits, bit_len):
 
     return int(n_rotated, 2)
 
-def convert_to_bytes(data: str) -> list[bytes]:
+def convert_to_bytes(data: str) -> list[int]:
     """ Convert to Bytes"""
     return [ord(x) for x in data]
 

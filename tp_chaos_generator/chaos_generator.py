@@ -46,9 +46,9 @@ class ChaosGenerator:
             m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
         return key
 
-    def encrypt(self, plain_text: list[bytes]) -> list:
+    def encrypt(self, plain_text: list[int]) -> list:
         """ Data Encryption """
-        
+
         _, yy = triple_pendulum_ode(
             self.tstart,
             self.tend,
