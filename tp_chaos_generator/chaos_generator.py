@@ -46,7 +46,7 @@ class ChaosGenerator:
             m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
         return key
 
-    def encrypt(self, plain_text: list[int]) -> list:
+    def encrypt(self, plain_text: list) -> list:
         """ Data Encryption """
 
         _, yy = triple_pendulum_ode(
@@ -64,7 +64,7 @@ class ChaosGenerator:
         key_len = len(self.key)
 
         #generate lookup table
-        lookup_table: list[list[int]] = []
+        lookup_table = []
         for i in range(self.num_chars):
             lookup_table.append([])
 
@@ -126,7 +126,7 @@ class ChaosGenerator:
 
         return y
 
-    def decrypt(self, cipher_text: list[int]) -> list[int]:
+    def decrypt(self, cipher_text: list) -> list:
         """ Data Decryption """
         key_len = len(self.key)
 

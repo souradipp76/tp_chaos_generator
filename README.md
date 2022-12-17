@@ -2,6 +2,9 @@
 
 ``tp_chaos_generator`` is a package which provides a library for encrypting and decrypting data using a 
 triple-pendulum based chaos generator.
+## Requirements
+
+- Python (>= 3.8)
 
 ## Installation
 
