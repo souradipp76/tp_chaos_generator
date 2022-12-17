@@ -1,9 +1,15 @@
 """ Chaos Generator """
 import struct
+
 import numpy as np
 
 from .triple_pendulum_ode import triple_pendulum_ode
-from .utils import circular_bit_rotate, half_precision, convert_to_bytes, convert_to_string
+from .utils import (
+    circular_bit_rotate,
+    convert_to_bytes,
+    convert_to_string,
+    half_precision,
+)
 
 class ChaosGenerator:
     """ Chaos Generator """
@@ -46,6 +52,7 @@ class ChaosGenerator:
             m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
         return key
 
+
     def encrypt(self, plain_text: list) -> list:
         """ Data Encryption """
 
@@ -59,11 +66,11 @@ class ChaosGenerator:
         y_min = np.min(Y)
         y_max = np.max(Y)
         epsilon = (y_max + self.delta_t - y_min)/self.num_chars
-        #epsilon = 2*np.pi/num_chars
+        # epsilon = 2*np.pi/num_chars
 
         key_len = len(self.key)
 
-        #generate lookup table
+        # generate lookup table
         lookup_table = []
         for i in range(self.num_chars):
             lookup_table.append([])
@@ -77,10 +84,10 @@ class ChaosGenerator:
         # print("Lookup Table")
         # print(lookup_table)
 
-        #Encryption
+        # Encryption
         y = []
 
-        ### selecting f(self.key) ###
+        # # selecting f(self.key)
         # f = halfprecision(self.key);
         # for K in range(1, key_len):
         #     f = bitxor(f, halfprecision(self.key[K]));
@@ -90,31 +97,31 @@ class ChaosGenerator:
             index = 0
             while flag is False:
                 r = np.random.rand()
-                #print(f"Random num generated: {r}")
+                # print(f"Random num generated: {r}")
                 lookup_values = lookup_table[p]
-                #c = intervals{1,d+1};
+                # c = intervals{1,d+1};
 
-                #select random between 0 to 1 and compare with eta
+                # select random between 0 to 1 and compare with eta
                 if r > self.eta:
                     #print(f"Index selected: {index}, Value: {lookup_values[index]}")
                     C = lookup_values[index]
 
                     f = struct.unpack('H', half_precision(self.key[i % key_len]))[0]
 
-                    #Operations
+                    # Operations
                     C = circular_bit_rotate(C, -(i % 16), 16)
-                    C = C^f
+                    C = C ^ f
                     C = circular_bit_rotate(C, -(i % 16), 16)
-                    C = C^f
+                    C = C ^ f
                     C = circular_bit_rotate(C, -(i % 16), 16)
-                    C = C^f
+                    C = C ^ f
 
                     y.append(C)
                     flag = True
                 else:
                     index = (index + 1) % len(lookup_values)
 
-                # ### select random index ###
+                # # select random index 
                 # len = len(lookup_values);
                 # r2 = np.random.randint([1, len])
                 # print(f"Random num generated for length {len}: {r2}")
@@ -125,6 +132,7 @@ class ChaosGenerator:
                 # flag= True
 
         return y
+
 
     def decrypt(self, cipher_text: list) -> list:
         """ Data Decryption """
@@ -142,7 +150,7 @@ class ChaosGenerator:
 
         y = []
 
-        #selecting f(self.key)
+        # # selecting f(self.key)
         # f = halfprecision(self.key);
         # for K in range(1, key_len):
         #     f = bitxor(f, halfprecision(self.key[K]));
@@ -150,12 +158,12 @@ class ChaosGenerator:
         for i, c in enumerate(cipher_text):
             f = struct.unpack('H', half_precision(self.key[i % key_len]))[0]
 
-            #Operations
-            C = c^f
+            # Operations
+            C = c ^ f
             C = circular_bit_rotate(C, i % 16, 16)
-            C = C^f
+            C = C ^ f
             C = circular_bit_rotate(C, i % 16, 16)
-            C = C^f
+            C = C ^ f
             C = circular_bit_rotate(C, i % 16, 16)
 
             y_val =  Y[C]
@@ -163,6 +171,7 @@ class ChaosGenerator:
             y.append(int(d))
 
         return y
+
 
 def main():
     """ Main """
