@@ -50,7 +50,7 @@ class ChaosGenerator:
         dtheta3 = 0
 
         key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3,
-                m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
+              m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
         return key
 
     def encrypt(self, plain_text: list) -> list:
@@ -103,7 +103,7 @@ class ChaosGenerator:
 
                 # select random between 0 to 1 and compare with eta
                 if r > self.eta:
-                    #print(f"Index selected: {index}, Value: {lookup_values[index]}")
+                    # print(f"Index selected: {index}, Value: {lookup_values[index]}")
                     C = lookup_values[index]
 
                     f = struct.unpack('H', half_precision(self.key[i % key_len]))[0]
@@ -165,7 +165,7 @@ class ChaosGenerator:
             C = C ^ f
             C = circular_bit_rotate(C, i % 16, 16)
 
-            y_val =  Y[C]
+            y_val = Y[C]
             d = np.floor((y_val - y_min) / epsilon)
             y.append(int(d))
 
