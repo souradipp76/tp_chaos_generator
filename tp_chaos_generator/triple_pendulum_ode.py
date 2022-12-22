@@ -2,7 +2,7 @@
 import numpy as np
 from scipy.integrate import solve_ivp
 
-from .utils import normalize_states, state_plotter, trajectory_plotter
+from tp_chaos_generator.utils import normalize_states, state_plotter, trajectory_plotter
 
 
 def triple_pendulum_ode(start, end, step, ivp) -> list:

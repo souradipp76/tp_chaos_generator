@@ -6,6 +6,7 @@ from math import copysign, frexp, isinf, isnan, trunc
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 NEGATIVE_INFINITY = b'\x00\xfc'
 POSITIVE_INFINITY = b'\x00\x7c'

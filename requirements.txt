@@ -1,4 +1,5 @@
 # Add your own dependencies to this file.
 matplotlib>=1.4.2
 numpy>=1.1
+pandas>=1.5.2
 scipy>=1.7.3

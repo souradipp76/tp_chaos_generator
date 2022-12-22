@@ -19,11 +19,12 @@ You can install ``tp_chaos_generator`` with:
 ```python
     >>> from tp_chaos_generator import chaos_generator, utils
     >>> cg = chaos_generator.ChaosGenerator()
+    >>> key = cg.generate_key()
     >>> text = utils.convert_to_bytes("A really secret message. Not for prying eyes.")
-    >>> tokens = cg.encrypt(text)
+    >>> tokens = cg.encrypt(text, key)
     >>> tokens
     '...'
-    >>> data = cg.decrypt(tokens)
+    >>> data = cg.decrypt(tokens, key)
     >>> utils.convert_to_string(data)
     'A really secret message. Not for prying eyes.'
 ```
