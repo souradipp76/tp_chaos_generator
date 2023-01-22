@@ -2,14 +2,14 @@
 import struct
 
 import numpy as np
-import pandas as pd
 
 from tp_chaos_generator.triple_pendulum_ode import triple_pendulum_ode
 from tp_chaos_generator.utils import (
     circular_bit_rotate,
     convert_to_bytes,
     convert_to_string,
-    half_precision,
+    decode_key,
+    half_precision
 )
 
 
@@ -25,7 +25,7 @@ class ChaosGenerator:
         self.num_chars = 256
         self.eta = 0.9
         self.g = 9.81
-        self.vault_path = "./vault/keyset.csv"
+        self.vault_path = "./vault/keyset.txt"
 
     def generate_key(self) -> list:
         """ Key Generation """
@@ -154,10 +154,15 @@ class ChaosGenerator:
 
     def fetch_key(self, path) -> list:
         """ Fetching Key from Vault """
-        df = pd.read_csv(path, header=None)
-        keyset_len = df.shape[0]
-        index = np.random.randint(0, keyset_len)
-        return df.iloc[index].values.tolist()
+        try:
+            with open(path, 'rb') as f:
+                lines = f.readlines()
+            keyset_len = len(lines)
+            index = np.random.randint(0, keyset_len)
+            key = decode_key(lines[index])
+            return key
+        except OSError as ex:
+            print(f'Error while fetching key. {str(ex)}')
 
 def main():
     """ Main """

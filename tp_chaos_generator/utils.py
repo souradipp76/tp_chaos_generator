@@ -1,12 +1,13 @@
 """ Utils """
 from __future__ import division
 
+import base64
+import csv
 import struct
 from math import copysign, frexp, isinf, isnan, trunc
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 
 NEGATIVE_INFINITY = b'\x00\xfc'
 POSITIVE_INFINITY = b'\x00\x7c'
@@ -119,3 +120,35 @@ def normalize_states(y: list) -> list:
     """ Normalize States """
     y = y - np.floor(y / (2 * np.pi)) * (2 * np.pi)
     return y
+
+def encode_keyset(file, path):
+    """ Encode Key Set File """
+    lines = []
+
+    try:
+        with open(file, 'r', encoding="utf8") as csvfile:
+            reader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+            for row in reader:
+                lines.append(row)
+
+        with open(path, 'wb') as f:
+            for line in lines:
+                line_str = ','.join(line)
+                line_byte = line_str.encode('utf-8')
+                enc_line = base64.b64encode(line_byte)
+                f.write(enc_line)
+                f.write(b'\n')
+    except OSError as ex:
+        print(f"Exception while encoding file: {str(ex)}")
+
+def decode_key(enc_bytes) -> list:
+    """ Decode Key """
+    try:
+        enc_bytes = enc_bytes.strip()
+        dec_line = base64.b64decode(enc_bytes)
+        dec_line = dec_line.decode()
+        key = [float(value) for value in dec_line.split(',')]
+        return key
+    except OSError as ex:
+        print(f"Exception while decoding key bytes: {str(ex)}")
+        return None
