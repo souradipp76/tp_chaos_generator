@@ -146,9 +146,9 @@ def decode_key(enc_bytes) -> list:
     try:
         enc_bytes = enc_bytes.strip()
         dec_line = base64.b64decode(enc_bytes)
-        dec_line = dec_line.decode()
-        key = [float(value) for value in dec_line.split(',')]
+        dec_line_str = dec_line.decode()
+        key = [float(value) for value in dec_line_str.split(',')]
         return key
     except OSError as ex:
         print(f"Exception while decoding key bytes: {str(ex)}")
-        return None
+        return []

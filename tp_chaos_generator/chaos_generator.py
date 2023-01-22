@@ -9,7 +9,7 @@ from tp_chaos_generator.utils import (
     convert_to_bytes,
     convert_to_string,
     decode_key,
-    half_precision
+    half_precision,
 )
 
 
@@ -163,6 +163,7 @@ class ChaosGenerator:
             return key
         except OSError as ex:
             print(f'Error while fetching key. {str(ex)}')
+            return []
 
 def main():
     """ Main """
