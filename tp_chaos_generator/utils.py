@@ -121,6 +121,7 @@ def normalize_states(y: list) -> list:
     y = y - np.floor(y / (2 * np.pi)) * (2 * np.pi)
     return y
 
+
 def encode_keyset(file, path):
     """ Encode Key Set File """
     lines = []
@@ -140,6 +141,7 @@ def encode_keyset(file, path):
                 f.write(b'\n')
     except OSError as ex:
         print(f"Exception while encoding file: {str(ex)}")
+
 
 def decode_key(enc_bytes) -> list:
     """ Decode Key """
