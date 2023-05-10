@@ -45,7 +45,7 @@ class ChaosGenerator:
         Y = yy[2]
         y_min = np.min(Y)
         y_max = np.max(Y)
-        epsilon = (y_max  - y_min) / self.num_chars
+        epsilon = (y_max - y_min) / self.num_chars
         # epsilon = 2 * np.pi / self.num_chars
 
         key_len = len(key)
@@ -151,7 +151,6 @@ class ChaosGenerator:
 
         return y
 
-
     def fetch_key(self, path) -> list:
         """ Fetching Key from Vault """
         try:
@@ -164,6 +163,7 @@ class ChaosGenerator:
         except OSError as ex:
             print(f'Error while fetching key. {str(ex)}')
             return []
+
 
 def main():
     """ Main """
