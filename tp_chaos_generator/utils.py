@@ -35,12 +35,12 @@ def half_precision(f):
     if e == 0 and m == 0:  # zero
         return NEGATIVE_ZERO if sign else POSITIVE_ZERO
 
-    f16 = trunc((2 * abs(m) - 1) * 2**10)  # XXX round toward zero
+    f16 = trunc((2 * abs(m) - 1) * 2**10)  # round toward zero
     assert 0 <= f16 < 2**10
     e16 = e + 14
     if e16 <= 0:  # subnormal
         # f = (-1)**sign * fraction / 2**10 * 2**(-14)
-        f16 = int(2**14 * 2**10 * abs(f) + .5)  # XXX round
+        f16 = int(2**14 * 2**10 * abs(f) + .5)  # round
         e16 = 0
     elif e16 >= 0b11111:  # infinite
         return NEGATIVE_INFINITY if sign else POSITIVE_INFINITY
