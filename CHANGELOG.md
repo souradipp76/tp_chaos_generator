@@ -7,4 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Unreleased
 
+## [v0.3.0](https://github.com/souradipp76/tp_chaos_generator/releases/tag/v0.3.0) - 2023-07-09
+
 ## [v0.1.0](https://github.com/souradipp76/tp_chaos_generator/releases/tag/v0.1.0) - 2023-05-09
