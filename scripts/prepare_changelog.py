@@ -6,6 +6,7 @@ from tp_chaos_generator.version import VERSION
 
 def main():
     changelog = Path("CHANGELOG.md")
+    print(VERSION)
 
     with changelog.open() as f:
         lines = f.readlines()
