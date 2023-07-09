@@ -7,12 +7,14 @@ from tp_chaos_generator.utils import normalize_states, state_plotter, trajectory
 
 
 def triple_pendulum_ode(start, end, step, ivp) -> list:
-    """ Solve ODE """
+    """Solve ODE"""
     params = ivp[6:19]
     xinit = ivp[0:6]
 
     tspan = np.arange(start, end, step)
-    sol = solve_ivp(lambda t, x: ode_func(t, x, params), [start, end], xinit, t_eval=tspan, rtol=1e-5)
+    sol = solve_ivp(
+        lambda t, x: ode_func(t, x, params), [start, end], xinit, t_eval=tspan, rtol=1e-5
+    )
 
     t, y = sol.t, sol.y
     y = normalize_states(y)
@@ -21,7 +23,7 @@ def triple_pendulum_ode(start, end, step, ivp) -> list:
 
 
 def main():
-    """ Main """
+    """Main"""
     m1 = 0.2944
     m2 = 0.1756
     m3 = 0.0947
@@ -43,7 +45,27 @@ def main():
     dtheta2 = 0
     dtheta3 = 0
 
-    key = [theta1, theta2, theta3, dtheta1, dtheta2, dtheta3, m1, m2, m3, l1, l2, l3, I1, I2, I3, k1, k2, k3, g]
+    key = [
+        theta1,
+        theta2,
+        theta3,
+        dtheta1,
+        dtheta2,
+        dtheta3,
+        m1,
+        m2,
+        m3,
+        l1,
+        l2,
+        l3,
+        I1,
+        I2,
+        I3,
+        k1,
+        k2,
+        k3,
+        g,
+    ]
 
     start = 0
     stop = 10

@@ -14,33 +14,30 @@ from tp_chaos_generator.utils import (
 
 
 class ChaosGenerator:
-    """ Chaos Generator """
+    """Chaos Generator"""
+
     def __init__(
         self,
     ) -> None:
         self.fps = 10000
         self.tstart = 0
         self.tend = 6.5535
-        self.delta_t = 1. / self.fps
+        self.delta_t = 1.0 / self.fps
         self.num_chars = 256
         self.eta = 0.9
         self.g = 9.81
         self.vault_path = "./vault/keyset.txt"
 
     def generate_key(self) -> list:
-        """ Key Generation """
+        """Key Generation"""
         key = self.fetch_key(self.vault_path)
         key.append(self.g)
         return key
 
     def encrypt(self, plain_text: list, key: list) -> list:
-        """ Data Encryption """
+        """Data Encryption"""
 
-        _, yy = triple_pendulum_ode(
-            self.tstart,
-            self.tend,
-            self.delta_t,
-            key)
+        _, yy = triple_pendulum_ode(self.tstart, self.tend, self.delta_t, key)
 
         Y = yy[2]
         y_min = np.min(Y)
@@ -51,7 +48,7 @@ class ChaosGenerator:
         key_len = len(key)
 
         # generate lookup table
-        lookup_table : list[list] = []
+        lookup_table: list[list] = []
         for i in range(self.num_chars):
             lookup_table.append([])
 
@@ -86,7 +83,7 @@ class ChaosGenerator:
                     # print(f"Index selected: {index}, Value: {lookup_values[index]}")
                     C = lookup_values[index]
 
-                    f = struct.unpack('H', half_precision(key[i % key_len]))[0]
+                    f = struct.unpack("H", half_precision(key[i % key_len]))[0]
 
                     # Operations
                     C = circular_bit_rotate(C, -(i % 16), 16)
@@ -114,14 +111,10 @@ class ChaosGenerator:
         return y
 
     def decrypt(self, cipher_text: list, key: list) -> list:
-        """ Data Decryption """
+        """Data Decryption"""
         key_len = len(key)
 
-        _, yy = triple_pendulum_ode(
-            self.tstart,
-            self.tend,
-            self.delta_t,
-            key)
+        _, yy = triple_pendulum_ode(self.tstart, self.tend, self.delta_t, key)
         Y = yy[2]
         y_min = np.min(Y)
         y_max = np.max(Y)
@@ -135,7 +128,7 @@ class ChaosGenerator:
         #     f = bitxor(f, halfprecision(self.key[K]));
 
         for i, c in enumerate(cipher_text):
-            f = struct.unpack('H', half_precision(key[i % key_len]))[0]
+            f = struct.unpack("H", half_precision(key[i % key_len]))[0]
 
             # Operations
             C = c ^ f
@@ -152,24 +145,24 @@ class ChaosGenerator:
         return y
 
     def fetch_key(self, path) -> list:
-        """ Fetching Key from Vault """
+        """Fetching Key from Vault"""
         try:
-            with open(path, 'rb') as f:
+            with open(path, "rb") as f:
                 lines = f.readlines()
             keyset_len = len(lines)
             index = np.random.randint(0, keyset_len)
             key = decode_key(lines[index])
             return key
         except OSError as ex:
-            print(f'Error while fetching key. {str(ex)}')
+            print(f"Error while fetching key. {str(ex)}")
             return []
 
 
 def main():
-    """ Main """
+    """Main"""
     cg = ChaosGenerator()
     key = cg.generate_key()
-    str = 'A course in Cryptography'
+    str = "A course in Cryptography"
     plain_text = convert_to_bytes(str)
     print("Plain Text: ", plain_text)
     cipher_text = cg.encrypt(plain_text, key)
