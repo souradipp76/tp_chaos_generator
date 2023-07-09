@@ -1,3 +1,5 @@
+![CI Build](https://github.com/souradipp76/tp_chaos_generator/actions/workflows/main.yml/badge.svg)
+
 # Triple Pendulum based Chaos Generator
 
 ``tp_chaos_generator`` is a package which provides a library for encrypting and decrypting data using a 
