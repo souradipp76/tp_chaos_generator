@@ -5,7 +5,7 @@ flake8
 mypy==1.7.1
 
 # Automatic code formatting
-black==23.11.0
+black==23.12.0
 isort==5.13.2
 
 # Running tests
