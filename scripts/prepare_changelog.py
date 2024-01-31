@@ -1,7 +1,7 @@
 from datetime import datetime
 from pathlib import Path
 
-from tp_chaos_generator.version import VERSION
+from tp_chaos_generator import VERSION
 
 
 def main():
@@ -16,7 +16,7 @@ def main():
         line = lines[i]
         if line.startswith("## Unreleased"):
             insert_index = i + 1
-        elif line.startswith(f"## [v{VERSION}]"):
+        elif line.startswith(f"## [v0.6.0]"):
             print("CHANGELOG already up-to-date")
             return
         elif line.startswith("## [v"):
