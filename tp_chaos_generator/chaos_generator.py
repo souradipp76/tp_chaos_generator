@@ -1,6 +1,7 @@
 """ Chaos Generator """
 
 import struct
+import time
 
 import numpy as np
 
@@ -28,6 +29,7 @@ class ChaosGenerator:
         self.eta = 0.9
         self.g = 9.81
         self.vault_path = "./vault/keyset.txt"
+        self.rng = np.random.default_rng()
 
     def generate_key(self) -> list:
         """Key Generation"""
@@ -151,7 +153,10 @@ class ChaosGenerator:
             with open(path, "rb") as f:
                 lines = f.readlines()
             keyset_len = len(lines)
-            index = np.random.randint(0, keyset_len)
+            seed = int(time.time())
+            print(seed)
+            self.rng = np.random.RandomState(seed)
+            index = self.rng.randint(0, keyset_len)
             key = decode_key(lines[index])
             return key
         except OSError as ex:
