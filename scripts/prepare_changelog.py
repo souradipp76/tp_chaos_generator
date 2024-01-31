@@ -7,7 +7,6 @@ from tp_chaos_generator.version import VERSION
 def main():
     changelog = Path("CHANGELOG.md")
     print(VERSION)
-    version = '0.6.0'
 
     with changelog.open() as f:
         lines = f.readlines()
@@ -17,7 +16,7 @@ def main():
         line = lines[i]
         if line.startswith("## Unreleased"):
             insert_index = i + 1
-        elif line.startswith(f"## [v{version}]"):
+        elif line.startswith(f"## [v{VERSION}]"):
             print("CHANGELOG already up-to-date")
             return
         elif line.startswith("## [v"):
@@ -29,7 +28,7 @@ def main():
     lines.insert(insert_index, "\n")
     lines.insert(
         insert_index + 1,
-        f"## [v{version}](https://github.com/souradipp76/tp_chaos_generator/releases/tag/v{version}) - "
+        f"## [v{VERSION}](https://github.com/souradipp76/tp_chaos_generator/releases/tag/v{VERSION}) - "
         f"{datetime.now().strftime('%Y-%m-%d')}\n",
     )
 
