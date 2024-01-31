@@ -1,12 +1,13 @@
 from datetime import datetime
 from pathlib import Path
 
-from tp_chaos_generator import VERSION
+from tp_chaos_generator.version import VERSION
 
 
 def main():
     changelog = Path("CHANGELOG.md")
     print(VERSION)
+    version = '0.6.0'
 
     with changelog.open() as f:
         lines = f.readlines()
@@ -16,7 +17,7 @@ def main():
         line = lines[i]
         if line.startswith("## Unreleased"):
             insert_index = i + 1
-        elif line.startswith(f"## [v0.6.0]"):
+        elif line.startswith(f"## [v{version}]"):
             print("CHANGELOG already up-to-date")
             return
         elif line.startswith("## [v"):
@@ -28,7 +29,7 @@ def main():
     lines.insert(insert_index, "\n")
     lines.insert(
         insert_index + 1,
-        f"## [v{VERSION}](https://github.com/souradipp76/tp_chaos_generator/releases/tag/v{VERSION}) - "
+        f"## [v{version}](https://github.com/souradipp76/tp_chaos_generator/releases/tag/v{version}) - "
         f"{datetime.now().strftime('%Y-%m-%d')}\n",
     )
 
