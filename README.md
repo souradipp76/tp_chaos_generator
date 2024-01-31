@@ -13,7 +13,7 @@ triple-pendulum based chaos generator.
 You can install ``tp_chaos_generator`` with:
 
 ```
-    $ pip install -e .
+    $ python -m pip install -e .
 ```
 
 ## Usage
@@ -29,6 +29,13 @@ You can install ``tp_chaos_generator`` with:
     >>> data = cg.decrypt(tokens, key)
     >>> utils.convert_to_string(data)
     'A really secret message. Not for prying eyes.'
+```
+## Test
+
+You can test ``tp_chaos_generator`` with:
+
+```
+    $ pytest
 ```
 
 ## Citation
