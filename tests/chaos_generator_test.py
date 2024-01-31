@@ -1,28 +1,38 @@
-import numpy as np
+""" Chaos Generator Tests"""
+
 import random
 import string
 import time
+
+import numpy as np
 import pytest
 
 from tp_chaos_generator import ChaosGenerator, utils
+
 
 def test_generate_key():
     cg = ChaosGenerator()
     keys1 = cg.generate_key()
     time.sleep(1)
     keys2 = cg.generate_key()
-    assert len(keys1) > 0 and len(keys1) == len(keys2) \
+    assert (
+        len(keys1) > 0
+        and len(keys1) == len(keys2)
         and not all(keys1[i] == keys2[i] for i in range(len(keys1)))
+    )
+
 
 @pytest.fixture
 def texts() -> list[str]:
     lengths = [10, 20, 50, 100, 500, 1000, 2000, 5000, 10000, 100000]
-    return [''.join(random.choice(string.printable) for i in range(len)) for len in lengths]
+    return ["".join(random.choice(string.printable) for i in range(len)) for len in lengths]
+
 
 @pytest.fixture
 def images() -> list:
     sizes = [5, 10, 20, 50, 100]
     return [np.random.randint(0, 256, (3, len, len)) for len in sizes]
+
 
 def test_texts(texts):
     cg = ChaosGenerator()
@@ -36,6 +46,7 @@ def test_texts(texts):
         decrypted_texts.append(de_text)
     assert len(texts) == len(decrypted_texts)
     assert all(texts[i] == decrypted_texts[i] for i in range(len(texts)))
+
 
 def test_images(images):
     cg = ChaosGenerator()

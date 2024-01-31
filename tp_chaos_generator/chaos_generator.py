@@ -154,7 +154,6 @@ class ChaosGenerator:
                 lines = f.readlines()
             keyset_len = len(lines)
             seed = int(time.time())
-            print(seed)
             self.rng = np.random.RandomState(seed)
             index = self.rng.randint(0, keyset_len)
             key = decode_key(lines[index])
