@@ -1,4 +1,4 @@
-""" Chaos Generator Tests"""
+"""Chaos Generator Tests"""
 
 import random
 import string

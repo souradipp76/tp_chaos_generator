@@ -1,4 +1,4 @@
-""" Utils """
+"""Utils"""
 
 from __future__ import division
 

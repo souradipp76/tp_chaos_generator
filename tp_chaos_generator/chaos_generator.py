@@ -1,4 +1,4 @@
-""" Chaos Generator """
+"""Chaos Generator"""
 
 import struct
 import time

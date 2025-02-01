@@ -1,4 +1,4 @@
-""" Version """
+"""Version"""
 
 _MAJOR = "0"
 _MINOR = "7"
