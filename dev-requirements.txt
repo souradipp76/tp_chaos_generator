@@ -16,7 +16,7 @@ pytest-sphinx
 pytest-cov
 
 # Needed for packaging and uploading to PyPi
-twine>=6.2.0
+twine>=7.0.0
 setuptools
 wheel
 
